@@ -5,7 +5,7 @@
 - 启动
 
 ```bash
-pnpm run dev | pnpm run vite(vite2的启动速度很快)
+pnpm run dev
 
 ```
 
