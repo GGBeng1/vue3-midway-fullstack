@@ -1,6 +1,6 @@
 import { Catch } from '@midwayjs/decorator';
 import { Context } from '@midwayjs/koa';
-import { RESDATA } from '../controller/sys/interface/resData';
+import { RESDATA } from '../module/sys/interface/resData';
 
 @Catch()
 export class DefaultErrorFilter {

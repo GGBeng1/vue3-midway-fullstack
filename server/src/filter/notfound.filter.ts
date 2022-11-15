@@ -1,7 +1,7 @@
 import { Catch } from '@midwayjs/decorator';
 import { httpError, MidwayHttpError } from '@midwayjs/core';
 import { Context } from '@midwayjs/koa';
-import { RESDATA } from '../controller/sys/interface/resData';
+import { RESDATA } from '../module/sys/interface/resData';
 
 @Catch(httpError.NotFoundError)
 export class NotFoundFilter {

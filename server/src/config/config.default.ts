@@ -26,7 +26,7 @@ export default {
         logging: true,
         // 字符集
         charset: 'utf8mb4',
-        entities: '../controller/sys/entity',
+        entities: '../module/sys/entity',
       },
     },
   },
