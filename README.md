@@ -15,7 +15,7 @@ pnpm run dev | pnpm run vite(vite2的启动速度很快)
 pnpm run build
 
 ```
-## server后端项目 采用 ```midway + typescript``` 开发
+## server后端项目 采用 ```midway + typescript + redis + mysql``` 开发
 - 启动
 
 ```bash
