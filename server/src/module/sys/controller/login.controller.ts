@@ -2,7 +2,7 @@ import { Controller, Post, Body, Inject, Get } from '@midwayjs/decorator';
 import { Validate } from '@midwayjs/validate';
 import { LoginService, GetCaptchaService } from '../service/login';
 import { HelperService } from '../service/helper';
-import { LoginDTO, RegisterDTO } from '../Dto/login';
+import { LoginDTO, RegisterDTO } from '../dto/login';
 import { CaptchaService } from '@midwayjs/captcha';
 
 @Controller('/')

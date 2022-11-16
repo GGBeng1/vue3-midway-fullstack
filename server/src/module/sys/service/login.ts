@@ -1,5 +1,5 @@
 import { Provide } from '@midwayjs/decorator';
-import { LoginDTO, RegisterDTO } from '../Dto/login';
+import { LoginDTO, RegisterDTO } from '../dto/login';
 import { User } from '../entity/user';
 import { Repository } from 'typeorm';
 import { InjectEntityModel } from '@midwayjs/typeorm';
