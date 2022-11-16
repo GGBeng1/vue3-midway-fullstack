@@ -40,4 +40,21 @@ export default {
       ttl: null,
     },
   },
+  captcha: {
+    default: {
+      // 默认配置
+      size: 4,
+      noise: 1,
+      width: 120,
+      height: 40,
+    },
+    image: {
+      // 最终会合并 default 配置
+      type: 'mixed',
+    },
+    formula: {}, // 最终会合并 default 配置
+    text: {}, // 最终会合并 default 配置
+    expirationTime: 60,
+    idPrefix: 'midway:vc',
+  },
 } as MidwayConfig;
