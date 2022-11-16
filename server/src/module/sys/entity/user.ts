@@ -1,43 +1,32 @@
-import {
-  Entity,
-  Column,
-  PrimaryGeneratedColumn,
-  Index,
-  CreateDateColumn,
-  UpdateDateColumn,
-  DeleteDateColumn,
-} from 'typeorm';
-
+import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { CommonBase } from './base';
 @Entity()
-export class User {
+export class User extends CommonBase {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({
+    name: 'name',
+    type: 'varchar',
+    length: 13,
+    comment: '用户昵称',
+  })
   name: string;
 
-  @Index({ unique: true })
-  @Column()
+  @Column({
+    name: 'name',
+    unique: true,
+    type: 'varchar',
+    length: 13,
+    comment: '用户昵称',
+  })
   username: string;
 
-  @Column()
+  @Column({
+    type: 'varchar',
+    length: 40,
+    nullable: true,
+    comment: '用户密码',
+  })
   password: string;
-
-  @CreateDateColumn({
-    name: 'create_time',
-    nullable: true,
-  })
-  createTime: Date;
-
-  @UpdateDateColumn({
-    name: 'update_time',
-    nullable: true,
-  })
-  updateTime: Date | null;
-
-  @DeleteDateColumn({
-    name: 'delete_at',
-    nullable: true,
-  })
-  deleteAt: Date | null;
 }
