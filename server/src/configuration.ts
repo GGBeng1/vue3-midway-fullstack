@@ -13,7 +13,6 @@ import { DefaultErrorFilter } from './filter/default.filter';
 import { NotFoundFilter } from './filter/notfound.filter';
 import { ReportMiddleware } from './middleware/report.middleware';
 import { JwtMiddleware } from './middleware/jwt.middleware';
-import { InitDecorator } from './service/initDecorator.service';
 
 @Configuration({
   imports: [
@@ -35,9 +34,6 @@ export class ContainerLifeCycle {
   app: koa.Application;
 
   @Inject()
-  initDecorator: InitDecorator;
-
-  @Inject()
   decoratorService: MidwayDecoratorService;
 
   async onReady() {
@@ -45,8 +41,5 @@ export class ContainerLifeCycle {
     this.app.useMiddleware([ReportMiddleware, JwtMiddleware]);
     // add filter
     this.app.useFilter([NotFoundFilter, DefaultErrorFilter]);
-
-    const cacheInitRes: [string, any] = await this.initDecorator.cacheInit();
-    this.decoratorService.registerMethodHandler(...cacheInitRes);
   }
 }

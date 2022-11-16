@@ -20,6 +20,7 @@ export class LoginService {
   @Inject()
   jwtService: JwtService;
 
+  @Cache(5)
   /**
    * Description placeholder
    * @date 11/15/2022 - 11:48:47 AM
