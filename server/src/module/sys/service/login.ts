@@ -113,7 +113,7 @@ export class LoginService {
 export class GetCaptchaService {
   @Inject()
   captchaService: CaptchaService;
-
+  // 接口缓存 3 秒 , 防止用户多次点击获取验证码
   @Cache(3)
   async get() {
     const { id, imageBase64 } = await this.captchaService.image({
