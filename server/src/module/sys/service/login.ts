@@ -45,7 +45,7 @@ export class LoginService {
     if (findData.password === md5(password)) {
       return {
         token: this.jwtService.signSync({ id: findData.id }),
-        UserInfo: {
+        userInfo: {
           userId: findData.id,
           name: findData.name,
           username: findData.username,

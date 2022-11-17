@@ -14,11 +14,11 @@ export class User extends CommonBase {
   name: string;
 
   @Column({
-    name: 'name',
+    name: 'username',
     unique: true,
     type: 'varchar',
     length: 13,
-    comment: '用户昵称',
+    comment: '用户名',
   })
   username: string;
 
