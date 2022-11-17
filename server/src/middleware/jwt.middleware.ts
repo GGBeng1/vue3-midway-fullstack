@@ -1,8 +1,11 @@
-import { Inject, Middleware } from '@midwayjs/decorator';
+import { Inject, Middleware, Config, ALL } from '@midwayjs/decorator';
 import { Context, NextFunction } from '@midwayjs/koa';
 import { JwtService } from '@midwayjs/jwt';
 @Middleware()
 export class JwtMiddleware {
+  @Config(ALL)
+  allConfig;
+
   @Inject()
   jwtService: JwtService;
 
@@ -53,8 +56,12 @@ export class JwtMiddleware {
 
   // 配置忽略鉴权的路由地址
   public match(ctx: Context): boolean {
+    // 获取公共前缀
+    const globalPrefix = this.allConfig.koa?.globalPrefix;
     const whiteList = ['/login', '/register', '/get-image-captcha'];
-    const ignore = whiteList.includes(ctx.path);
+    const ignore = whiteList.includes(
+      globalPrefix ? ctx.path.split(globalPrefix)[1] : ctx.path
+    );
     return !ignore;
   }
 }

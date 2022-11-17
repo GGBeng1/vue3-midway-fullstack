@@ -6,6 +6,7 @@ export default {
   keys: '1667543005095_613',
   koa: {
     port: 7001,
+    globalPrefix: '/v1',
   },
   jwt: {
     secret: 'shyt-ggbeng',

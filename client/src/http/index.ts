@@ -8,7 +8,7 @@ export class Request {
   // axios 实例
   instance: AxiosInstance
   // 基础配置，url和超时时间
-  baseConfig: AxiosRequestConfig = { baseURL: '/api', timeout: 60000 }
+  baseConfig: AxiosRequestConfig = { baseURL: '/v1', timeout: 60000 }
   reqConfig: ApiRequest.reqConfig = {
     loading: true,
     loadingText: '加载中...',
