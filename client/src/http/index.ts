@@ -27,7 +27,7 @@ export class Request {
         // 请求拦截里面加token，用于后端的验证
         const token = localStorage.getItem('token') as string
         if (token) {
-          config.headers!.Authorization = token
+          config.headers!.Authorization = `Bearer ${token}`
         }
         return config
       },

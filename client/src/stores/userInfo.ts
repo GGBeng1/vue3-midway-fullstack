@@ -25,6 +25,15 @@ export const useUserInfoStore = defineStore('userInfo', () => {
     localStorage.setItem('token', data.token)
     localStorage.setItem('userInfo', JSON.stringify(data.userInfo))
   }
-
-  return { AuthState, ChangeAuthState }
+  const ClearAuthState = async () => {
+    AuthState.token = ''
+    AuthState.userInfo = {
+      userId: '',
+      userName: '',
+      name: '',
+    }
+    localStorage.removeItem('token')
+    localStorage.removeItem('userInfo')
+  }
+  return { AuthState, ChangeAuthState, ClearAuthState }
 })
