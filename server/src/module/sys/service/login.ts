@@ -7,6 +7,8 @@ import { Inject } from '@midwayjs/decorator';
 import { CaptchaService } from '@midwayjs/captcha';
 import { JwtService } from '@midwayjs/jwt';
 import { Cache } from '../../../decorator/cache.decorator';
+import { CacheManager } from '@midwayjs/cache';
+
 import * as md5 from 'md5';
 
 @Provide()
@@ -18,11 +20,17 @@ export class LoginService {
   captchaService: CaptchaService;
 
   @Inject()
+  ctx;
+
+  @Inject()
   jwtService: JwtService;
+
+  @Inject()
+  cacheManager: CacheManager;
 
   @Cache(5)
   /**
-   * Description placeholder
+   * Description 用户登录
    * @date 11/15/2022 - 11:48:47 AM
    * @author GGbeng
    *
@@ -43,8 +51,11 @@ export class LoginService {
     });
     if (!findData) throw new Error('用户名不存在');
     if (findData.password === md5(password)) {
+      const token = this.jwtService.signSync({ id: findData.id });
+      // 在redis中缓存token 并以过期时间为主
+      this.cacheManager.set(token, findData.id, { ttl: 60 * 60 * 24 * 2 });
       return {
-        token: this.jwtService.signSync({ id: findData.id }),
+        token,
         userInfo: {
           userId: findData.id,
           name: findData.name,
@@ -55,7 +66,7 @@ export class LoginService {
   }
 
   /**
-   * Description placeholder
+   * Description 用户注册
    * @date 11/15/2022 - 11:49:03 AM
    * @author GGbeng
    *
@@ -81,6 +92,20 @@ export class LoginService {
       await this.userModel.save(user);
       return true;
     }
+  }
+
+  /**
+   * Description 用户登出
+   * @date 11/17/2022 - 2:58:39 PM
+   * @author GGbeng
+   *
+   * @async
+   * @returns {Promise<boolean>}
+   */
+  async loginOut(): Promise<boolean> {
+    const token: string = this.ctx.request.header.authorization.split(' ')[1];
+    await this.cacheManager.del(token);
+    return true;
   }
 }
 

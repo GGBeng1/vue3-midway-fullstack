@@ -1,6 +1,8 @@
 import { Inject, Middleware, Config, ALL } from '@midwayjs/decorator';
 import { Context, NextFunction } from '@midwayjs/koa';
 import { JwtService } from '@midwayjs/jwt';
+import { CacheManager } from '@midwayjs/cache';
+
 @Middleware()
 export class JwtMiddleware {
   @Config(ALL)
@@ -8,6 +10,9 @@ export class JwtMiddleware {
 
   @Inject()
   jwtService: JwtService;
+
+  @Inject()
+  cacheManager: CacheManager;
 
   public static getName(): string {
     return 'jwt';
@@ -35,12 +40,13 @@ export class JwtMiddleware {
       }
 
       const [scheme, token] = parts;
-
+      let tokenValue: any = null;
       if (/^Bearer$/i.test(scheme)) {
         try {
           //jwt.verify方法验证token是否有效
-          await this.jwtService.verify(token, {
+          tokenValue = await this.jwtService.verify(token, {
             complete: true,
+            ignoreExpiration: true,
           });
         } catch (error) {
           ctx.status = 401;
@@ -48,6 +54,18 @@ export class JwtMiddleware {
             code: 401,
             message: '登录失效~',
           };
+        }
+        // 增加redis判断 更新用户token缓存时间 用户两天内没有登录过就会失效
+        if (!this.cacheManager.get(token)) {
+          ctx.status = 401;
+          ctx.body = {
+            code: 401,
+            message: '登录或已过期，请重新登录~',
+          };
+        } else {
+          this.cacheManager.set(token, tokenValue.payload.id, {
+            ttl: 60 * 60 * 24 * 2,
+          });
         }
         await next();
       }

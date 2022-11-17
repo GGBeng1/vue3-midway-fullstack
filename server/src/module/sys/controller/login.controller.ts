@@ -3,23 +3,29 @@ import { Validate } from '@midwayjs/validate';
 import { LoginService, GetCaptchaService } from '../service/login';
 import { HelperService } from '../service/helper';
 import { LoginDTO, RegisterDTO } from '../dto/login';
-import { CaptchaService } from '@midwayjs/captcha';
-
+import { Context } from '@midwayjs/koa';
 @Controller('/')
 export class LoginController {
   @Inject()
   loginService: LoginService;
+
   @Inject()
   getCaptchaService: GetCaptchaService;
-  @Inject()
-  captchaService: CaptchaService;
+
   @Inject()
   helper: HelperService;
+
+  @Inject()
+  ctx: Context;
 
   @Post('/login')
   @Validate()
   async login(@Body() data: LoginDTO) {
     return this.helper.ok(await this.loginService.login(data));
+  }
+  @Post('/login-out')
+  async loginOut() {
+    return this.helper.ok(await this.loginService.loginOut());
   }
 
   @Post('/register')
