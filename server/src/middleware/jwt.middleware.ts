@@ -56,14 +56,15 @@ export class JwtMiddleware {
           };
         }
         // 增加redis判断 更新用户token缓存时间 用户两天内没有登录过就会失效
-        if (!this.cacheManager.get(token)) {
+        const username = tokenValue.payload.username;
+        if (!this.cacheManager.get(username)) {
           ctx.status = 401;
           ctx.body = {
             code: 401,
             message: '登录或已过期，请重新登录~',
           };
         } else {
-          this.cacheManager.set(token, tokenValue.payload.id, {
+          this.cacheManager.set('username', username, {
             ttl: 60 * 60 * 24 * 2,
           });
         }

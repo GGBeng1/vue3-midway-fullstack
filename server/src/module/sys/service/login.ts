@@ -51,9 +51,11 @@ export class LoginService {
     });
     if (!findData) throw new Error('用户名不存在');
     if (findData.password === md5(password)) {
-      const token = this.jwtService.signSync({ id: findData.id });
+      const token = this.jwtService.signSync({ username: findData.username });
       // 在redis中缓存token 并以过期时间为主
-      this.cacheManager.set(token, findData.id, { ttl: 60 * 60 * 24 * 2 });
+      this.cacheManager.set('username', findData.username, {
+        ttl: 60 * 60 * 24 * 2,
+      });
       return {
         token,
         userInfo: {
