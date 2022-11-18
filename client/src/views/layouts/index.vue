@@ -73,8 +73,5 @@ onMounted(async () => {
       vertical-align: middle;
     }
   }
-  // &_aside {
-  // background-color: var(--el-color-info-light-3);
-  // }
 }
 </style>

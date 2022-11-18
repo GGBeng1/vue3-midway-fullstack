@@ -8,7 +8,7 @@ import { CaptchaService } from '@midwayjs/captcha';
 import { JwtService } from '@midwayjs/jwt';
 import { Cache } from '../../../decorator/cache.decorator';
 import { CacheManager } from '@midwayjs/cache';
-
+import { loginResData } from '../interface/login';
 import * as md5 from 'md5';
 
 @Provide()
@@ -36,8 +36,9 @@ export class LoginService {
    *
    * @async
    * @param {LoginDTO} data
+   * @returns {Promise<loginResData>}
    */
-  async login(data: LoginDTO) {
+  async login(data: LoginDTO): Promise<loginResData> {
     const { username, captchaId, verifyCode, password, userFinger } = data;
     const passed: boolean = await this.captchaService.check(
       captchaId,
@@ -122,8 +123,17 @@ export class GetCaptchaService {
   @Inject()
   captchaService: CaptchaService;
   // 接口缓存 3 秒 , 防止用户多次点击获取验证码
+
+  /**
+   * Description 获取验证码
+   * @date 11/18/2022 - 3:50:33 PM
+   * @author GGbeng
+   *
+   * @async
+   * @returns {Promise<{ id: string; imageBase64: string }>}
+   */
   @Cache(3)
-  async get() {
+  async get(): Promise<{ id: string; imageBase64: string }> {
     const { id, imageBase64 } = await this.captchaService.image({
       width: 120,
       height: 40,
