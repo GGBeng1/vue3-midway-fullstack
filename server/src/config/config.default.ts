@@ -28,6 +28,7 @@ export default {
         // 字符集
         charset: 'utf8mb4',
         entities: '../module/sys/entity',
+        timezone: '+08:00',
       },
     },
   },
