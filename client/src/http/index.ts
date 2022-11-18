@@ -2,6 +2,7 @@
 import axios from 'axios'
 import type { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios'
 import { showLoading, closeLoading } from '@/utils'
+import { useUserInfoStore } from '@/stores/userInfo'
 
 // 导出Request类
 export class Request {
@@ -61,6 +62,7 @@ export class Request {
         }
         // 处理http常见错误，进行全局提示
         if (this.reqConfig.errorTip) {
+          const store = useUserInfoStore()
           let message = ''
           switch (err.response.status) {
             case 400:
@@ -68,7 +70,7 @@ export class Request {
               break
             case 401:
               message = '未授权，请重新登录(401)'
-              // 这里可以做清空storage并跳转到登录页的操作
+              store.ClearAuthState()
               break
             case 403:
               message = '拒绝访问(403)'
@@ -102,7 +104,7 @@ export class Request {
           }
           ElMessage({
             showClose: true,
-            message: `${message}，请检查网络或联系管理员！`,
+            message: `${err.message || message}，请检查网络或联系管理员！`,
             type: 'error',
           })
         }

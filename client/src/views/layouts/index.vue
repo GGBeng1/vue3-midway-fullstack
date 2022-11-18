@@ -28,14 +28,14 @@ import { loginOut } from '@/http/api/login'
 // 存储用户信息
 const store = useUserInfoStore()
 const router = useRouter()
-// const { AuthState } = storeToRefs(store)
-// console.log(AuthState)
+const { AuthState } = storeToRefs(store)
+const userInfo = toRef(AuthState.value, 'userInfo')
 const isDark = useDark()
 const toggleDark = useToggle(isDark)
 
 // 登出
 const handlerLoginOut = async () => {
-  let res = await loginOut()
+  let res = await loginOut({ username: userInfo.value.username })
   let { code, data } = res.data
   if (code === 200 && data) {
     await store.ClearAuthState()
@@ -43,6 +43,13 @@ const handlerLoginOut = async () => {
     router.push('/login')
   }
 }
+onMounted(async () => {
+  const res = await store.InitAndCheckUserFinger()
+  if (!res) {
+    router.push('/login')
+    ElMessage.error('切换设备，请重新登录')
+  }
+})
 </script>
 <style lang="scss" scoped>
 .common-layout {

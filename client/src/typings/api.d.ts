@@ -38,6 +38,18 @@ declare namespace ApiLogin {
   }
 
   /**
+   * Description 登出
+   * @date 11/18/2022 - 3:17:02 PM
+   * @author GGbeng
+   *
+   * @interface LoginOutReq
+   * @typedef {LoginOutReq}
+   * @param username - 用户名
+   */
+  interface LoginOutReq {
+    username: string
+  }
+  /**
    * Description 登录接口信息
    * @date 11/1/2022 - 3:48:40 PM
    * @author GGbeng
@@ -74,12 +86,12 @@ declare namespace Auth {
    *
    * @typedef {UserInfo}
    * @param {string} userId - 用户id
-   * @param {string} userName - 用户名
+   * @param {string} username - 用户名
    * @param {string} name - 用户昵称
    */
   type UserInfo = {
     userId: string
-    userName: string
+    username: string
     name: string
   }
 }
@@ -105,4 +117,9 @@ interface Menu {
   id: string
   parentId: string
   children?: Menu[]
+}
+
+interface UserFinger {
+  userFinger: string
+  username: string
 }

@@ -29,4 +29,13 @@ export class User extends CommonBase {
     comment: '用户密码',
   })
   password: string;
+
+  @Column({
+    name: 'user_finger',
+    type: 'varchar',
+    length: 40,
+    nullable: true,
+    comment: '用户指纹',
+  })
+  userFinger: string;
 }

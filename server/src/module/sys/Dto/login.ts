@@ -9,6 +9,10 @@ export class LoginDTO {
   @Rule(RuleType.string().max(12).min(6).required())
   password: string;
 
+  // 用户指纹
+  @Rule(RuleType.required())
+  userFinger: string;
+
   // 验证码ID
   @Rule(RuleType.string().required())
   captchaId: string;
@@ -26,3 +30,4 @@ export class RegisterDTO extends PickDto(LoginDTO, ['username', 'password']) {
   @Rule(RuleType.string().max(12).min(6).required())
   password1: string;
 }
+export class LoginOutDTO extends PickDto(LoginDTO, ['username']) {}

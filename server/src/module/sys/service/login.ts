@@ -38,7 +38,7 @@ export class LoginService {
    * @param {LoginDTO} data
    */
   async login(data: LoginDTO) {
-    const { username, captchaId, verifyCode, password } = data;
+    const { username, captchaId, verifyCode, password, userFinger } = data;
     const passed: boolean = await this.captchaService.check(
       captchaId,
       verifyCode
@@ -52,8 +52,13 @@ export class LoginService {
     if (!findData) throw new Error('用户名不存在');
     if (findData.password === md5(password)) {
       const token = this.jwtService.signSync({ username: findData.username });
-      // 在redis中缓存token 并以过期时间为主
-      this.cacheManager.set('username', findData.username, {
+      findData.userFinger = userFinger;
+      await this.userModel.save(findData);
+      // 在redis中缓存token及用户指纹 并以过期时间为主
+      this.cacheManager.set(username, findData.username, {
+        ttl: 60 * 60 * 24 * 2,
+      });
+      this.cacheManager.set(`${username}:userFinger`, userFinger, {
         ttl: 60 * 60 * 24 * 2,
       });
       return {
@@ -104,9 +109,10 @@ export class LoginService {
    * @async
    * @returns {Promise<boolean>}
    */
-  async loginOut(): Promise<boolean> {
+  async loginOut(data): Promise<boolean> {
     const token: string = this.ctx.request.header.authorization.split(' ')[1];
     await this.cacheManager.del(token);
+    await this.cacheManager.del(`${data.username}:userFinger`);
     return true;
   }
 }

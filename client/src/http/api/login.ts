@@ -4,8 +4,8 @@ export const login = (params: ApiLogin.LoginReqForm) => {
   return Request.post<ApiLogin.LoginResData>('/login', params)
 }
 // 用户退出
-export const loginOut = () => {
-  return Request.post<ApiLogin.LoginResData>('/login-out')
+export const loginOut = (params: ApiLogin.LoginOutReq) => {
+  return Request.post<ApiLogin.LoginResData>('/login-out', params)
 }
 // 用户注册
 export const register = (params: ApiLogin.RegisterReqForm) => {

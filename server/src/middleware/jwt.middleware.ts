@@ -64,7 +64,7 @@ export class JwtMiddleware {
             message: '登录或已过期，请重新登录~',
           };
         } else {
-          this.cacheManager.set('username', username, {
+          this.cacheManager.set(username, username, {
             ttl: 60 * 60 * 24 * 2,
           });
         }

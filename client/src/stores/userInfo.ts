@@ -1,15 +1,18 @@
+import FingerprintJS from '@fingerprintjs/fingerprintjs'
+import { checkUserFinger } from '@/http/api/user'
 export const useUserInfoStore = defineStore('userInfo', () => {
   const userInfoData: Auth.UserInfo = localStorage.getItem('userInfo')
     ? JSON.parse(localStorage.getItem('userInfo') as string)
     : {
         userId: '',
-        userName: '',
+        username: '',
       }
   const AuthState: ApiLogin.LoginResData = reactive({
     token: localStorage.getItem('token') || '',
     userInfo: userInfoData,
   })
-
+  // 用户指纹
+  const UserFinger = ref('')
   /**
    * Description 改变用户信息
    * @date 11/1/2022 - 3:54:37 PM
@@ -29,11 +32,37 @@ export const useUserInfoStore = defineStore('userInfo', () => {
     AuthState.token = ''
     AuthState.userInfo = {
       userId: '',
-      userName: '',
+      username: '',
       name: '',
     }
     localStorage.removeItem('token')
     localStorage.removeItem('userInfo')
   }
-  return { AuthState, ChangeAuthState, ClearAuthState }
+  const InitAndCheckUserFinger = async () => {
+    if (!UserFinger.value) {
+      const fpPromise = FingerprintJS.load()
+      const fp = await fpPromise
+      const result = await fp.get()
+      UserFinger.value = result.visitorId
+    }
+    if (!AuthState.userInfo.username) return
+    const res = await checkUserFinger({
+      userFinger: UserFinger.value,
+      username: AuthState.userInfo.username,
+    })
+    const { code } = res.data
+    if (code === 200) {
+      return true
+    } else {
+      ClearAuthState()
+      return false
+    }
+  }
+  return {
+    AuthState,
+    UserFinger,
+    ChangeAuthState,
+    ClearAuthState,
+    InitAndCheckUserFinger,
+  }
 })

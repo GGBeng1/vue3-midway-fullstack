@@ -46,6 +46,7 @@ import Captcha from './captcha.vue'
 
 // 存储用户信息
 const store = useUserInfoStore()
+const { UserFinger } = storeToRefs(store)
 const { ChangeAuthState } = store
 const router = useRouter()
 
@@ -84,7 +85,9 @@ const submitForm = (formEl: FormInstance | undefined) => {
   if (!formEl) return
   formEl.validate(async (valid: boolean) => {
     if (valid) {
-      let res = await login(form)
+      let res = await login(
+        Object.assign({}, form, { userFinger: UserFinger.value }),
+      )
       let { code, data } = res.data
       if (code === 200) {
         await ChangeAuthState(data)
@@ -110,8 +113,9 @@ const handlerRefreshCaptcha = () => {
     }
   })
 }
-onMounted(() => {
+onMounted(async () => {
   handlerRefreshCaptcha()
+  await store.InitAndCheckUserFinger()
 })
 </script>
 
