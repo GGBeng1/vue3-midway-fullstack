@@ -42,5 +42,3 @@ const handlerchangeType = (typeValue: TypeVlaue) => {
   type.value = typeValue
 }
 </script>
-
-<style lang="scss" scoped></style>
