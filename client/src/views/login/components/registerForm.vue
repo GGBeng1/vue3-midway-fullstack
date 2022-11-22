@@ -41,6 +41,7 @@
 <script setup lang="ts">
 import type { FormInstance, FormRules } from 'element-plus'
 import { register } from '@/http/api/login'
+import * as md5 from 'md5'
 
 const ruleFormRef = ref<FormInstance>()
 
@@ -89,7 +90,10 @@ const submitForm = (formEl: FormInstance | undefined) => {
   if (!formEl) return
   formEl.validate(async (valid: boolean) => {
     if (valid) {
-      const { data } = await register(form)
+      let reqValue = { ...form }
+      reqValue.password = md5(form.password)
+      reqValue.password1 = md5(form.password1)
+      const { data } = await register(reqValue)
       if (data.code === 200) {
         ElMessage({
           showClose: true,

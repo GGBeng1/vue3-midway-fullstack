@@ -10,3 +10,5 @@ interface LoadingBar {
 declare interface Window {
   $loadingBar: LoadingBar
 }
+
+declare module 'md5'

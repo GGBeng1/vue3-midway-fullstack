@@ -43,7 +43,7 @@ import type { FormInstance, FormRules } from 'element-plus'
 import { useUserInfoStore } from '@/stores/userInfo'
 import { login, getCaptcha } from '@/http/api/login'
 import Captcha from './captcha.vue'
-
+import * as md5 from 'md5'
 // 存储用户信息
 const store = useUserInfoStore()
 const { UserFinger } = storeToRefs(store)
@@ -85,9 +85,9 @@ const submitForm = (formEl: FormInstance | undefined) => {
   if (!formEl) return
   formEl.validate(async (valid: boolean) => {
     if (valid) {
-      let res = await login(
-        Object.assign({}, form, { userFinger: UserFinger.value }),
-      )
+      let reqValue = Object.assign({}, form, { userFinger: UserFinger.value })
+      reqValue.password = md5(reqValue.password)
+      let res = await login(reqValue)
       let { code, data } = res.data
       if (code === 200) {
         await ChangeAuthState(data)

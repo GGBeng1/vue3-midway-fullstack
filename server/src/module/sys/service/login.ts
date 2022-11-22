@@ -9,7 +9,6 @@ import { JwtService } from '@midwayjs/jwt';
 import { Cache } from '../../../decorator/cache.decorator';
 import { CacheManager } from '@midwayjs/cache';
 import { loginResData } from '../interface/login';
-import * as md5 from 'md5';
 
 @Provide()
 export class LoginService {
@@ -51,7 +50,7 @@ export class LoginService {
       },
     });
     if (!findData) throw new Error('用户名不存在');
-    if (findData.password === md5(password)) {
+    if (findData.password === password) {
       const token = this.jwtService.signSync({ username: findData.username });
       findData.userFinger = userFinger;
       await this.userModel.save(findData);
@@ -96,7 +95,7 @@ export class LoginService {
       const user = new User();
       user.name = name;
       user.username = username;
-      user.password = md5(password);
+      user.password = password;
       await this.userModel.save(user);
       return true;
     }

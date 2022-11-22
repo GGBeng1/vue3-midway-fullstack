@@ -6,7 +6,7 @@ export class LoginDTO {
   username: string;
 
   // 密码
-  @Rule(RuleType.string().max(12).min(6).required())
+  @Rule(RuleType.string().max(100).min(6).required())
   password: string;
 
   // 用户指纹
@@ -27,7 +27,7 @@ export class RegisterDTO extends PickDto(LoginDTO, ['username', 'password']) {
   @Rule(RuleType.string().max(12).min(3).required())
   name: string;
   // 确认密码
-  @Rule(RuleType.string().max(12).min(6).required())
+  @Rule(RuleType.string().max(100).min(6).required())
   password1: string;
 }
 export class LoginOutDTO extends PickDto(LoginDTO, ['username']) {}
