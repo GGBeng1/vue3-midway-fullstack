@@ -14,6 +14,7 @@ module.exports = {
     ecmaVersion: 'latest',
   },
   rules: {
+    'no-undef': 'off',
     'generator-star-spacing': 'off',
     'vue/script-setup-uses-vars': ['off'],
     'vue/multi-word-component-names': ['off'],
