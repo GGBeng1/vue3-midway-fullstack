@@ -45,7 +45,4 @@ const type: Ref<TypeVlaue> = ref('login')
 const handlerchangeType = (typeValue: TypeVlaue) => {
   type.value = typeValue
 }
-onMounted(() => {
-  console.log(getCurrentInstance())
-})
 </script>
