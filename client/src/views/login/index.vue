@@ -34,6 +34,10 @@ import type { Ref } from 'vue'
 import loginForm from './components/loginForm.vue'
 import registerForm from './components/registerForm.vue'
 
+defineOptions({
+  name: 'Login',
+})
+
 type TypeVlaue = 'login' | 'register' // 登录类型
 
 const type: Ref<TypeVlaue> = ref('login')
@@ -41,4 +45,7 @@ const type: Ref<TypeVlaue> = ref('login')
 const handlerchangeType = (typeValue: TypeVlaue) => {
   type.value = typeValue
 }
+onMounted(() => {
+  console.log(getCurrentInstance())
+})
 </script>

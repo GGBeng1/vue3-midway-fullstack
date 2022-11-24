@@ -11,6 +11,7 @@ import { viteMockServe } from 'vite-plugin-mock'
 import Icons from 'unplugin-icons/vite'
 import IconsResolver from 'unplugin-icons/resolver'
 import path from 'path'
+import DefineOptions from 'unplugin-vue-define-options/vite'
 
 const pathSrc = path.resolve(__dirname, 'src')
 
@@ -61,6 +62,7 @@ export default defineConfig({
     viteMockServe({
       mockPath: 'mock',
     }),
+    DefineOptions(),
   ],
   resolve: {
     alias: {

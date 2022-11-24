@@ -6,6 +6,10 @@
 </template>
 
 <script setup lang="ts">
+defineOptions({
+  name: 'Welcome',
+})
+
 const handler1 = () => {
   window.$loadingBar.start()
 }

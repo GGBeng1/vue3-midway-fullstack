@@ -25,6 +25,11 @@ import asideComponent from './components/aside.vue'
 import { useDark, useToggle } from '@vueuse/core'
 import { useUserInfoStore } from '@/stores/userInfo'
 import { loginOut } from '@/http/api/login'
+
+defineOptions({
+  name: 'Layout',
+})
+
 // 存储用户信息
 const store = useUserInfoStore()
 const router = useRouter()
