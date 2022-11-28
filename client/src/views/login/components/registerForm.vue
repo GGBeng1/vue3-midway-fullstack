@@ -94,7 +94,7 @@ const submitForm = (formEl: FormInstance | undefined) => {
       reqValue.password = md5(form.password)
       reqValue.password1 = md5(form.password1)
       const { data } = await register(reqValue)
-      if (data.code === 200) {
+      if (data.code === CODE.SUCCESS) {
         ElMessage({
           showClose: true,
           message: '注册成功',

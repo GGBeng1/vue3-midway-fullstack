@@ -89,7 +89,7 @@ const submitForm = (formEl: FormInstance | undefined) => {
       reqValue.password = md5(reqValue.password)
       let res = await login(reqValue)
       let { code, data } = res.data
-      if (code === 200) {
+      if (code === CODE.SUCCESS) {
         await ChangeAuthState(data)
         router.push('/welcome')
       }
@@ -107,7 +107,7 @@ const resetForm = (formEl: FormInstance | undefined) => {
 const handlerRefreshCaptcha = () => {
   getCaptcha().then(res => {
     let { code, data } = res.data
-    if (code === 200) {
+    if (code === CODE.SUCCESS) {
       form.captchaId = data.id
       base64.value = data.imageBase64
     }

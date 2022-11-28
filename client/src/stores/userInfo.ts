@@ -51,7 +51,7 @@ export const useUserInfoStore = defineStore('userInfo', () => {
       username: AuthState.userInfo.username,
     })
     const { code } = res.data
-    if (code === 200) {
+    if (code === CODE.SUCCESS) {
       return true
     } else {
       ClearAuthState()

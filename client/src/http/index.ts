@@ -45,7 +45,7 @@ export class Request {
             closeLoading()
           }, 200)
         }
-        if (res.data.code !== 200 && this.reqConfig.errorTip) {
+        if (res.data.code !== '10200' && this.reqConfig.errorTip) {
           ElMessage({
             showClose: true,
             message: `${res.data.message}`,

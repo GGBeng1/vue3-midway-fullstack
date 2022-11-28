@@ -1,19 +1,19 @@
 import { Provide } from '@midwayjs/decorator';
-import { RESDATA, RESCODE } from '../interface/resData';
-import { CustomErrorEnum } from '../../../error/common.error';
+import { RESDATA } from '../interface/resData';
+import { CODE } from '../../../interface/code';
 @Provide()
 // 辅助函数 帮助快速返回接口code
 export class HelperService {
-  async ok(data?: any, code?: RESCODE.RESFAIL): Promise<RESDATA> {
+  async ok(data?: any, code?: CODE): Promise<RESDATA> {
     return {
-      code: code || 200,
+      code: code ?? CODE.SUCCESS,
       data,
       message: 'success',
     };
   }
-  async error(message?: string, code?: RESCODE.RESFAIL): Promise<RESDATA> {
+  async error(message?: string, code?: CODE): Promise<RESDATA> {
     return {
-      code: code || CustomErrorEnum.COMMON,
+      code: code ?? CODE.COMMON_ERROR,
       data: null,
       message,
     };

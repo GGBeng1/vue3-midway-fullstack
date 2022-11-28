@@ -2,7 +2,7 @@ import { Inject, Middleware, Config, ALL } from '@midwayjs/decorator';
 import { Context, NextFunction } from '@midwayjs/koa';
 import { JwtService } from '@midwayjs/jwt';
 import { CacheManager } from '@midwayjs/cache';
-import { CustomErrorEnum } from '../error/common.error';
+import { CODE } from '../interface/code';
 @Middleware()
 export class JwtMiddleware {
   @Config(ALL)
@@ -24,7 +24,7 @@ export class JwtMiddleware {
       if (!ctx.headers['authorization']) {
         ctx.status = 401;
         ctx.body = {
-          code: CustomErrorEnum.AUTHERROR,
+          code: CODE.AUTH_ERROR,
           message: '登录或已过期，请重新登录',
         };
       }
@@ -34,7 +34,7 @@ export class JwtMiddleware {
       if (parts.length !== 2) {
         ctx.status = 401;
         ctx.body = {
-          code: CustomErrorEnum.AUTHERROR,
+          code: CODE.AUTH_ERROR,
           message: '登录或已过期，请重新登录',
         };
       }
@@ -51,7 +51,7 @@ export class JwtMiddleware {
         } catch (error) {
           ctx.status = 401;
           ctx.body = {
-            code: CustomErrorEnum.AUTHERROR,
+            code: CODE.AUTH_ERROR,
             message: '登录失效~',
           };
         }
@@ -60,7 +60,7 @@ export class JwtMiddleware {
         if (!this.cacheManager.get(username)) {
           ctx.status = 401;
           ctx.body = {
-            code: CustomErrorEnum.AUTHERROR,
+            code: CODE.AUTH_ERROR,
             message: '登录或已过期，请重新登录~',
           };
         } else {

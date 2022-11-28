@@ -1,12 +1,29 @@
 declare namespace ApiRequest {
   /**
+   * Description 接口code枚举值key集合
+   * @date 11/28/2022 - 3:08:02 PM
+   * @author GGbeng
+   *
+   * @typedef {serverCodeKey}
+   */
+  type serverCodeKey = keyof typeof import('@/enum').CODE
+
+  /**
+   * Description 接口code枚举值集合
+   * @date 11/28/2022 - 3:08:28 PM
+   * @author GGbeng
+   *
+   * @typedef {serverCode}
+   */
+  type serverCode = typeof import('@/enum').CODE[serverCodeKey]
+  /**
    * 后端返回值内容
-   * @param code - 状态码 200为正确
+   * @param code - 状态码 10200为正确
    * @param message - 提示信息
    * @param data - 返回值
    */
   type Result<T> = {
-    code: number
+    code: serverCode
     message?: string
     data: T
   }

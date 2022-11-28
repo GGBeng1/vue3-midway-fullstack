@@ -41,7 +41,15 @@ export default defineConfig({
         /\.vue$/,
         /\.vue\?vue/,
       ],
-      imports: ['vue', 'vue-router', 'pinia', '@vueuse/core'],
+      imports: [
+        'vue',
+        'vue-router',
+        'pinia',
+        '@vueuse/core',
+        {
+          '/src/enum': ['CODE'],
+        },
+      ],
       dts: path.resolve(pathSrc, 'typings', 'auto-imports.d.ts'),
       vueTemplate: true,
       resolvers: [

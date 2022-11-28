@@ -42,7 +42,7 @@ const toggleDark = useToggle(isDark)
 const handlerLoginOut = async () => {
   let res = await loginOut({ username: userInfo.value.username })
   let { code, data } = res.data
-  if (code === 200 && data) {
+  if (code === CODE.SUCCESS && data) {
     await store.ClearAuthState()
     ElMessage.success('登出成功')
     router.push('/login')
