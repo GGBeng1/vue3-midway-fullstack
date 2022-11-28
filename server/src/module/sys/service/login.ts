@@ -9,7 +9,7 @@ import { JwtService } from '@midwayjs/jwt';
 import { Cache } from '../../../decorator/cache.decorator';
 import { CacheManager } from '@midwayjs/cache';
 import { loginResData } from '../interface/login';
-
+import { UseError } from '../../../error/common.error';
 @Provide()
 export class LoginService {
   @InjectEntityModel(User)
@@ -43,13 +43,13 @@ export class LoginService {
       captchaId,
       verifyCode
     );
-    if (!passed) throw new Error('验证码错误');
+    if (!passed) throw new UseError('验证码错误');
     const findData = await this.userModel.findOne({
       where: {
         username,
       },
     });
-    if (!findData) throw new Error('用户名不存在');
+    if (!findData) throw new UseError('用户名不存在');
     if (findData.password === password) {
       const token = this.jwtService.signSync({ username: findData.username });
       findData.userFinger = userFinger;
@@ -83,14 +83,14 @@ export class LoginService {
    */
   async register(data: RegisterDTO): Promise<boolean> {
     const { name, username, password, password1 } = data;
-    if (password !== password1) throw new Error('两次密码不一致');
+    if (password !== password1) throw new UseError('两次密码不一致');
     const findData = await this.userModel.findOne({
       where: {
         username,
       },
     });
     if (findData) {
-      throw new Error('用户名已存在');
+      throw new UseError('用户名已存在');
     } else {
       const user = new User();
       user.name = name;
