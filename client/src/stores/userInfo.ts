@@ -20,7 +20,6 @@ export const useUserInfoStore = defineStore('userInfo', () => {
    *
    * @async
    * @param {ApiLogin.LoginResData} data
-   * @returns {*}
    */
   const ChangeAuthState = async (data: ApiLogin.LoginResData) => {
     AuthState.token = data.token
