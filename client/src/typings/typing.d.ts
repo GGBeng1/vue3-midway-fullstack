@@ -3,12 +3,8 @@ declare module '*.vue' {
   const Component: ReturnType<typeof defineComponent>
   export default Component
 }
-interface LoadingBar {
-  start: () => Promise<void>
-  finish: () => void
-}
 declare interface Window {
-  $loadingBar: LoadingBar
+  $loadingBar: InstanceType<typeof import('@/components/loadingBar.vue')>
 }
 
 declare module 'md5'
