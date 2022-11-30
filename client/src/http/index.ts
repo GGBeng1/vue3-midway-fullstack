@@ -3,27 +3,31 @@ import axios from 'axios'
 import type { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios'
 import { showLoading, closeLoading } from '@/utils'
 import { useUserInfoStore } from '@/stores/userInfo'
-
+interface constomerConfig<D = any> extends AxiosRequestConfig {
+  loading?: boolean
+  loadingText?: string
+  errorTip?: boolean
+  data?: D
+}
+interface constomerAxiosResponse<T = any, D = any> extends AxiosResponse {
+  data: T
+  config: constomerConfig<D>
+}
 // 导出Request类
 export class Request {
   // axios 实例
   instance: AxiosInstance
   // 基础配置，url和超时时间
   baseConfig: AxiosRequestConfig = { baseURL: '/v1', timeout: 60000 }
-  reqConfig: ApiRequest.reqConfig = {
-    loading: true,
-    loadingText: '加载中...',
-    errorTip: true,
-  }
-  constructor(config: AxiosRequestConfig) {
+  constructor(newConfig: AxiosRequestConfig) {
     // 使用axios.create创建axios实例
-    this.instance = axios.create(Object.assign(this.baseConfig, config))
+    this.instance = axios.create(Object.assign(this.baseConfig, newConfig))
 
     this.instance.interceptors.request.use(
-      (config: AxiosRequestConfig) => {
+      (config: constomerConfig) => {
         // 设置loading
-        if (this.reqConfig.loading) {
-          showLoading(this.reqConfig.loadingText)
+        if (config?.loading !== false) {
+          showLoading(config?.loadingText || '加载中...')
         }
         // 请求拦截里面加token，用于后端的验证
         const token = localStorage.getItem('token') as string
@@ -39,13 +43,13 @@ export class Request {
     )
 
     this.instance.interceptors.response.use(
-      (res: AxiosResponse) => {
-        if (this.reqConfig.loading) {
+      (res: constomerAxiosResponse) => {
+        if (res.config.loading !== false) {
           setTimeout(() => {
             closeLoading()
           }, 200)
         }
-        if (res.data.code !== '10200' && this.reqConfig.errorTip) {
+        if (res.data.code !== '10200' && res.config.errorTip !== false) {
           ElMessage({
             showClose: true,
             message: `${res.data.message}`,
@@ -55,13 +59,13 @@ export class Request {
         return res
       },
       (err: any) => {
-        if (this.reqConfig.loading) {
+        if (err?.config?.loading !== false) {
           setTimeout(() => {
             closeLoading()
           }, 200)
         }
         // 处理http常见错误，进行全局提示
-        if (this.reqConfig.errorTip) {
+        if (err?.config?.errorTip !== false) {
           const store = useUserInfoStore()
           let message = ''
           switch (err.response.status) {
@@ -115,61 +119,40 @@ export class Request {
   }
 
   // 定义请求方法
-  public async request(
-    config: AxiosRequestConfig,
-    reqConfig?: ApiRequest.reqConfig,
-  ): Promise<AxiosResponse> {
-    await this.handlerReqConfig(reqConfig)
+  public async request(config: constomerConfig): Promise<AxiosResponse> {
     return this.instance.request(config)
   }
 
   public async get<T = any>(
     url: string,
     params?: object,
-    config?: AxiosRequestConfig,
-    reqConfig?: ApiRequest.reqConfig,
+    config?: constomerConfig,
   ): Promise<AxiosResponse<ApiRequest.Result<T>>> {
-    await this.handlerReqConfig(reqConfig)
     return this.instance({ url, params, ...config, method: 'get' })
   }
 
   public async post<T = any>(
     url: string,
     data?: any,
-    config?: AxiosRequestConfig,
-    reqConfig?: ApiRequest.reqConfig,
+    config?: constomerConfig,
   ): Promise<AxiosResponse<ApiRequest.Result<T>>> {
-    await this.handlerReqConfig(reqConfig)
     return this.instance.post(url, data, config)
   }
 
   public async put<T = any>(
     url: string,
     data?: any,
-    config?: AxiosRequestConfig,
-    reqConfig?: ApiRequest.reqConfig,
+    config?: constomerConfig,
   ): Promise<AxiosResponse<ApiRequest.Result<T>>> {
-    await this.handlerReqConfig(reqConfig)
     return this.instance.put(url, data, config)
   }
 
   public async delete<T = any>(
     url: string,
     params?: object,
-    config?: AxiosRequestConfig,
-    reqConfig?: ApiRequest.reqConfig,
+    config?: constomerConfig,
   ): Promise<AxiosResponse<ApiRequest.Result<T>>> {
-    await this.handlerReqConfig(reqConfig)
     return this.instance({ url, params, ...config, method: 'delete' })
-  }
-  // 处理请求配置项
-  async handlerReqConfig(
-    reqConfigData?: ApiRequest.reqConfig,
-  ): Promise<boolean> {
-    if (reqConfigData) {
-      this.reqConfig = Object.assign(this.reqConfig, reqConfigData)
-    }
-    return true
   }
 }
 

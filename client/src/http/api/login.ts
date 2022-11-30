@@ -13,5 +13,7 @@ export const register = (params: ApiLogin.RegisterReqForm) => {
 }
 // 获取验证码
 export const getCaptcha = () => {
-  return Request.get<ApiLogin.LoginCaptcha>('/get-image-captcha')
+  return Request.get<ApiLogin.LoginCaptcha>('/get-image-captcha', undefined, {
+    loading: false,
+  })
 }
