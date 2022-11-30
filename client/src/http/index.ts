@@ -7,6 +7,7 @@ interface constomerConfig<D = any> extends AxiosRequestConfig {
   loading?: boolean
   loadingText?: string
   errorTip?: boolean
+  blob?: boolean
   data?: D
 }
 interface constomerAxiosResponse<T = any, D = any> extends AxiosResponse {
@@ -48,6 +49,9 @@ export class Request {
           setTimeout(() => {
             closeLoading()
           }, 200)
+        }
+        if (res.config.blob === true) {
+          return res
         }
         if (res.data.code !== '10200' && res.config.errorTip !== false) {
           ElMessage({
